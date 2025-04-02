@@ -20,13 +20,17 @@
       margin: auto;
       
       padding: 20px;
+
+      border-radius: 6px;
     }
     .red {
       color: red;
     }
     .chart {
       background-color: #1a222d;
-      border-radius: 4px;
+      border-radius: 6px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
       overflow: hidden;
       position: relative;
       
@@ -198,10 +202,14 @@
     
     .setlimit {
       background-color: #242831;
-      padding: 2px;
+      padding: 6px;
       color: #fff;
       
       display: flex;
+      border-radius: 3px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+
     }
     
     .setlimit > div {
@@ -209,7 +217,7 @@
       
       background: black;
       border-radius: 2px;
-      padding: 4px 2px 0px 2px;
+      padding: 4px 2px 2px 2px;
       
       flex-grow: 1;
       
@@ -388,7 +396,7 @@
             type: 'linear',
             title: { display: false, text: 'Time (s)' },
             suggestedMin: 0,
-            suggestedMax: 60,
+            suggestedMax: 600,
             
           },
           y: {
