@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Power Supply Live Data</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
     body {
       background-color: black;
@@ -198,8 +199,6 @@
     }
     
     
-    
-    
     .setlimit {
       background-color: #242831;
       padding: 6px;
@@ -376,7 +375,8 @@
           x: {
             ticks: {
               display: false, // hide label only (not the grid lines)
-              major: true,
+              // major: true,
+              source: 'auto',
             },
             border: {
               display: true,
@@ -393,11 +393,18 @@
               
             },
             beginAtZero: true,
-            type: 'linear',
+            type: 'timeseries',
             title: { display: false, text: 'Time (s)' },
-            suggestedMin: 0,
-            suggestedMax: 600,
-            
+            suggestedMin: new Date().getTime() - 60000,
+            suggestedMax: new Date().getTime(),
+            reverse: true,
+            time: {
+              displayFormats: {
+                millisecond: 'mm:ss:sss'
+              },
+              unit: 'millisecond',
+            }
+        
           },
           y: {
             ticks: {
@@ -457,7 +464,7 @@
         
       }
       
-      const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 1000; // Convert to seconds
+      const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 100;
       
       chart.data.datasets[0].data.unshift({ x: timeElapsed, y: data.voltage });
       chart.data.datasets[1].data.unshift({ x: timeElapsed, y: data.current });
@@ -488,10 +495,10 @@
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
-      if (chart.data.datasets[0].data.length > 600) {
-        // chart.data.datasets.forEach(dataset => dataset.data.shift());
-        chart.data.datasets.forEach(dataset => dataset.data.pop())
-      }
+      // if (chart.data.datasets[0].data.length > 600) {
+      //   // chart.data.datasets.forEach(dataset => dataset.data.shift());
+      //   chart.data.datasets.forEach(dataset => dataset.data.pop())
+      // }
       
       chart.update();
       
