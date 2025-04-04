@@ -471,7 +471,8 @@
       }
 
       // const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 100;
-      const timestamp = new Date(data.timestamp);
+      // const timestamp = new Date(data.timestamp);
+      const timestamp = data.timestamp;
       
       chart.data.datasets[0].data.push({ x: timestamp, y: data.voltage });
       chart.data.datasets[1].data.push({ x: timestamp, y: data.current });
