@@ -442,9 +442,9 @@
     let startTime = null;
     
     // Helper for dynamic element querying
-    const e = (querySelector) => document.querySelector(querySelector);
-    
+    const e = (querySelector) => document.querySelector(querySelector);    
     let updateElapsed;
+
     // let count = 0;
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -456,7 +456,7 @@
         let count = 0;
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
-          let now = Date.now();
+          let now = new Date.getTime();
           let curr = new Date(now - startTime);
           /*document.getElementById('test').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3);*/
           // e('.sessiontime').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3).toString().padStart(2, "0");
@@ -464,6 +464,8 @@
         }, 10);
         
       }
+
+      
       
       // const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 100;
       const timestamp = new Date(data.timestamp);
