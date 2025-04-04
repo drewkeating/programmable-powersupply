@@ -499,7 +499,7 @@
       
       if (chart.data.datasets[0].data.length > 600) {
         // chart.data.datasets.forEach(dataset => dataset.data.shift());
-        chart.data.datasets.forEach(dataset => dataset.data.pop())
+        chart.data.datasets.forEach(dataset => dataset.data.shift())
       }
       
       chart.update();
