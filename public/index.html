@@ -395,14 +395,14 @@
             beginAtZero: true,
             type: 'timeseries',
             title: { display: false, text: 'Time (s)' },
-            suggestedMin: new Date().getTime() - 60000,
-            suggestedMax: new Date().getTime(),
+            suggestedMin: new Date() - (6000), // hour ago
+            suggestedMax: new Date(),
             reverse: true,
             time: {
               displayFormats: {
-                millisecond: 'mm:ss:sss'
+                millisecond: 'hh:mm:ss'
               },
-              unit: 'millisecond',
+              unit: 'second',
             }
         
           },
@@ -466,7 +466,7 @@
       }
       
       // const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 100;
-      const timestamp = data.timestamp;
+      const timestamp = new Date(data.timestamp);
       
       chart.data.datasets[0].data.push({ x: timestamp, y: data.voltage });
       chart.data.datasets[1].data.push({ x: timestamp, y: data.current });
