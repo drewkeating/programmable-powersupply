@@ -453,11 +453,11 @@
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);
         // startTime = new Date(data.timestamp).getTime();
-        startTime = new Date().getTime();
+        startTime = Date.now();
         let count = 0;
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
-          let now = new Date.getTime();
+          let now = Date.now();
           let curr = new Date(now - startTime);
           /*document.getElementById('test').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3);*/
           // e('.sessiontime').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3).toString().padStart(2, "0");
