@@ -452,7 +452,8 @@
       
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);
-        startTime = new Date(data.timestamp).getTime();
+        // startTime = new Date(data.timestamp).getTime();
+        startTime = new Date().getTime();
         let count = 0;
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
