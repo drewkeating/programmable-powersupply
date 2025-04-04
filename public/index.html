@@ -476,14 +476,14 @@
       if (data.status == "Offline") {
         e('.status').classList.add("red");
         e('.status2').innerHTML = 'CV';
-        e('.status2').classList.removeClass('green');
+        e('.status2').classList.remove('green');
         startTime = null;
         clearInterval(updateElapsed);
       }
       else {
         e('.status').classList.remove("red");
         e('.status2').innerHTML = 'CC';
-        e('.status2').classList.addClass('green');
+        e('.status2').classList.add('green');
       }
       
       e('.voltage').innerHTML = data.voltage;
