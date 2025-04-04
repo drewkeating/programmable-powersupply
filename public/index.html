@@ -497,10 +497,10 @@
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
-      // if (chart.data.datasets[0].data.length > 600) {
-      //   // chart.data.datasets.forEach(dataset => dataset.data.shift());
-      //   chart.data.datasets.forEach(dataset => dataset.data.pop())
-      // }
+      if (chart.data.datasets[0].data.length > 600) {
+        // chart.data.datasets.forEach(dataset => dataset.data.shift());
+        chart.data.datasets.forEach(dataset => dataset.data.pop())
+      }
       
       chart.update();
       
