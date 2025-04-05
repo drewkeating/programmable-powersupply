@@ -27,6 +27,10 @@
     .red {
       color: red;
     }
+    .green {
+      color: green;
+    }
+
     .chart {
       background-color: #1a222d;
       border-radius: 6px;
@@ -162,6 +166,13 @@
       
       padding: 4px 4px 0 4px;
     }
+
+    .statusbar .status2 {
+      color: orange;
+    }
+    .statusbar .status2.green {
+      color: green;
+    }
     
     .statusbar div {
       background-color: #545373;
@@ -253,7 +264,7 @@
     <div class="chart hidden2">
       <div class="statusbar">
         <div class="status red" style="width: 40px">OFF</div>
-        <div class="cc status2" style="color: orange; "><span class="">CC</span></div>
+        <div class="cc"><span class="status2">CC</span></div>
         <div class="cc" style="text-align: left;"><span style="padding: 2px 4px 0 4px;"><span style="color: #4df641"> T</span> <span class="sessiontime">00:00:00</span></span></div>
         <div class="cc" style="margin-left: 4px"><span style="color: #0a97df; background: #070003; padding: 2px 6px 4px 6px"><span class="power" style="width: 80px;">00.00</span> w</span></div>
       </div>
@@ -374,9 +385,9 @@
         scales: {
           x: {
             ticks: {
-              display: false, // hide label only (not the grid lines)
+              display: true, // hide label only (not the grid lines)
               // major: true,
-              source: 'auto',
+              // source: 'auto',
             },
             border: {
               display: true,
@@ -392,15 +403,15 @@
               drawOnChartArea: false,
               
             },
-            position: 'left',
-            beginAtZero: true,
+            // position: 'left',
+            // beginAtZero: true,
             type: 'linear',
             title: { display: false, text: 'Time (s)' },
             // suggestedMin: new Date() - (6000), // hour ago
             // suggestedMax: new Date(),
             // min: 0,
             // max: 60000,
-            reverse: true,
+            // reverse: false,
             // time: {
             //   displayFormats: {
             //     millisecond: 'hh:mm:ss'
@@ -448,46 +459,71 @@
     const e = (querySelector) => document.querySelector(querySelector);    
     let updateElapsed;
 
+    // Init chart data set (0-60s data, so we don't get scaling issues)
+    let voltageHistory = [];
+    let currentHistory = [];
+
+    for (let i=0; i<600; i++) {
+      var tmp = 100 * i;
+      voltageHistory.push({ x: tmp, y: 0 });
+      currentHistory.push({ x: tmp, y: 0 });
+    }
+
+    // Populate chart
+    chart.data.datasets[0].data = voltageHistory;
+    chart.data.datasets[1].data = currentHistory;
+    chart.update();
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('Received raw data:', data);
-      
+
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);
+
         // startTime = new Date(data.timestamp).getTime();
+        // TODO: This *should* be using the `data.timestamp`, as it's most accurate. 
+        // Using Date.now() to optimize UI due to clientside ease.
         startTime = Date.now();
         let count = 0;
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
           let now = Date.now();
-          let diff = now - startTime;
+          let diff = now - startTime; // in miliseconds
 
-          /*document.getElementById('test').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3);*/
           // e('.sessiontime').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3).toString().padStart(2, "0");
-          //e('.sessiontime').innerHTML = ("0" + curr.getHours()).slice(-2) + ":" + ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2);
           e('.sessiontime').innerHTML = ("0" + Math.round(diff / 3600000)).slice(-2) + ":" + 
             ("0" + Math.round(diff / 60000)).slice(-2) + ":" + 
             ("0" + Math.round(diff / 1000)).slice(-2);
+
         }, 10);        
       }
 
-      // const timestamp = data.timestamp;
-      const timeElapsed = Date.now() - startTime;
+      // We want 10 data points per second
+      const timeElapsed = (Date.now() - startTime) / 100;
       
-      chart.data.datasets[0].data.push({ x: timeElapsed, y: data.voltage });
-      chart.data.datasets[1].data.push({ x: timeElapsed, y: data.current });
+      // chart.data.datasets[0].data.push({ x: timeElapsed, y: data.voltage });
+      // chart.data.datasets[1].data.push({ x: timeElapsed, y: data.current });
       // chart.data.datasets[2].data.push({ x: timeElapsed, y: data.power });
+      chart.data.datasets[0].data.unshift({ x: timeElapsed, y: data.voltage });
+      chart.data.datasets[1].data.unshift({ x: timeElapsed, y: data.current });
       
       e('.status').innerHTML = data.status == "Offline" ? "OFF" : "ON";
+      
       if (data.status == "Offline") {
         e('.status').classList.add("red");
+        e('.status').classList.remove("green");
+
         e('.status2').innerHTML = 'CV';
         e('.status2').classList.remove('green');
+
         startTime = null;
         clearInterval(updateElapsed);
       }
       else {
         e('.status').classList.remove("red");
+        e('.status').classList.add("green");
+
         e('.status2').innerHTML = 'CC';
         e('.status2').classList.add('green');
       }
@@ -504,11 +540,12 @@
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
-      if (chart.data.datasets[0].data.length > 600) {
+      if (chart.data.datasets[0].data.length >= 600) {
         // chart.data.datasets.forEach(dataset => dataset.data.shift());
-        chart.data.datasets.forEach(dataset => dataset.data.shift())
+        chart.data.datasets.forEach(dataset => dataset.data.pop());
       }
-      
+    
+      // Draw
       chart.update();
     };
   </script>
