@@ -392,18 +392,21 @@
               drawOnChartArea: false,
               
             },
+            position: 'left',
             beginAtZero: true,
-            type: 'timeseries',
+            type: 'linear',
             title: { display: false, text: 'Time (s)' },
-            suggestedMin: new Date() - (6000), // hour ago
-            suggestedMax: new Date(),
+            // suggestedMin: new Date() - (6000), // hour ago
+            // suggestedMax: new Date(),
+            // min: 0,
+            // max: 60000,
             reverse: true,
-            time: {
-              displayFormats: {
-                millisecond: 'hh:mm:ss'
-              },
-              unit: 'second',
-            }
+            // time: {
+            //   displayFormats: {
+            //     millisecond: 'hh:mm:ss'
+            //   },
+            //   unit: 'second',
+            // }
         
           },
           y: {
@@ -445,7 +448,6 @@
     const e = (querySelector) => document.querySelector(querySelector);    
     let updateElapsed;
 
-    // let count = 0;
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('Received raw data:', data);
@@ -458,7 +460,6 @@
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
           let now = Date.now();
-          // let curr = new Date(now - startTime);
           let diff = now - startTime;
 
           /*document.getElementById('test').innerHTML = ("0" + curr.getMinutes()).slice(-2) + ":" + ("0" + curr.getSeconds()).slice(-2) + ":" + ("0" + curr.getMilliseconds()).slice(1, 3);*/
@@ -470,12 +471,11 @@
         }, 10);        
       }
 
-      // const timeElapsed = (new Date(data.timestamp).getTime() - startTime) / 100;
-      // const timestamp = new Date(data.timestamp);
-      const timestamp = data.timestamp;
+      // const timestamp = data.timestamp;
+      const timeElapsed = Date.now() - startTime;
       
-      chart.data.datasets[0].data.push({ x: timestamp, y: data.voltage });
-      chart.data.datasets[1].data.push({ x: timestamp, y: data.current });
+      chart.data.datasets[0].data.push({ x: timeElapsed, y: data.voltage });
+      chart.data.datasets[1].data.push({ x: timeElapsed, y: data.current });
       // chart.data.datasets[2].data.push({ x: timeElapsed, y: data.power });
       
       e('.status').innerHTML = data.status == "Offline" ? "OFF" : "ON";
@@ -500,6 +500,7 @@
       e('.voltage_limit').innerHTML = data.voltage_limit;
       e('.current_limit').innerHTML = data.current_limit;
       
+      // Toggle hide/show of chart for offline status.
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
@@ -509,13 +510,6 @@
       }
       
       chart.update();
-      
-      // count++;
-      // // Attempt at fixing dynamic timeline stretching
-      // if (count >= 50) {
-      //     startTime = new Date(data.timestamp).getTime();
-      //     count = 0;
-      // }
     };
   </script>
 </body>
