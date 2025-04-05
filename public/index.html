@@ -325,9 +325,6 @@
       </div>
       
     </div>
-    
-    
-    
   </div>
   
   <script>
@@ -356,6 +353,7 @@
           stepped: 'middle',
           tension: 0,
           pointBorderWidth: 0,
+          pointRadius: 0 // disable for a single dataset
         },
         {
           label: 'Current (A)',
@@ -366,6 +364,7 @@
           stepped: 'middle',
           tension: 0,
           pointBorderWidth: 0,
+          pointRadius: 0 // disable for a single dataset
         },
         // {
         //     label: 'Power (W)',
@@ -385,7 +384,7 @@
         scales: {
           x: {
             ticks: {
-              display: true, // hide label only (not the grid lines)
+              display: false, // hide label only (not the grid lines)
               // major: true,
               // source: 'auto',
             },
@@ -395,35 +394,38 @@
               color: 'white',
             },
             grid: {
-              display: true,
+              display: false,
               color: 'white',
               // tickBorderDash: [
               //     10,100,10,0,1000,10, 100, 10
               // ],
-              drawOnChartArea: false,
+              drawOnChartArea: true,
               
             },
-            position: 'right',
-            // beginAtZero: true,
-            type: 'linear',
+            position: 'left',
+            beginAtZero: true,
             title: { display: false, text: 'Time (s)' },
             // suggestedMin: new Date() - (6000), // hour ago
             // suggestedMax: new Date(),
             // min: 0,
             // max: 60000,
             reverse: true,
-            // time: {
-            //   displayFormats: {
-            //     millisecond: 'hh:mm:ss'
-            //   },
-            //   unit: 'second',
-            // }
+            time: {
+              displayFormats: {
+                millisecond: 'hh:mm:ss',
+              },
+              // unit: 'millisecond',
+              parser: false,
+            },
+            type: 'time',
+            parsing: false,
         
           },
           y: {
             ticks: {
               color: 'white',
               // major: true,
+              // mirror: true,
             },
             border: {
               display: true,
@@ -465,7 +467,9 @@
 
     for (let i=0; i<600; i++) {
       // var tmp = 100 * i;
-      var tmp = i;
+      // var tmp = i * 100 * -1;
+      // var tmp = i;
+      let tmp = Date.now() - (i * 100); // (60000);        // new Date(Date.now() - (i * 1000));
       voltageHistory.push({ x: tmp, y: 0 });
       currentHistory.push({ x: tmp, y: 0 });
     }
@@ -473,6 +477,8 @@
     // Populate chart
     chart.data.datasets[0].data = voltageHistory;
     chart.data.datasets[1].data = currentHistory;
+
+    // Predraw chart
     chart.update();
 
     ws.onmessage = (event) => {
@@ -486,7 +492,7 @@
         // TODO: This *should* be using the `data.timestamp`, as it's most accurate. 
         // Using Date.now() to optimize UI due to clientside ease.
         startTime = Date.now();
-        let count = 0;
+        // let count = 0;
         // Repeating every ms, update timer
         updateElapsed = setInterval(() => {
           let now = Date.now();
@@ -500,12 +506,14 @@
         }, 10);        
       }
 
-      // We want 10 data points per second
-      const timeElapsed = (Date.now() - startTime) / 100;
       
-      // chart.data.datasets[0].data.push({ x: timeElapsed, y: data.voltage });
-      // chart.data.datasets[1].data.push({ x: timeElapsed, y: data.current });
-      // chart.data.datasets[2].data.push({ x: timeElapsed, y: data.power });
+      // We want 10 data points per second
+      // const timeElapsed = new Date(Date.now() - startTime);
+      // const timeElapsed = new Date(Date.now() - startTime);
+      // console.log("cungus:", timeElapsed.getMilliseconds());
+      // const timeElapsed = (Date.now() - startTime) / 100;
+      const timeElapsed = Date.now();
+      
       chart.data.datasets[0].data.unshift({ x: timeElapsed, y: data.voltage });
       chart.data.datasets[1].data.unshift({ x: timeElapsed, y: data.current });
       
