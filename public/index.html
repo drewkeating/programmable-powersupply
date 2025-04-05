@@ -481,6 +481,13 @@
     // Predraw chart
     chart.update();
 
+    // Handle socket close
+    ws.addEventListener("close", (event) => {
+      startTime = null;
+      return clearInterval(updateElapsed);
+    });
+
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       // console.log('Received raw data:', data);
