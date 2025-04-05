@@ -17,6 +17,10 @@ Run `node index.js` to interface with serial device, and deploy websocket reques
 
 Visit `index.html` to receive websocket requests, which update UI
 
+### Testing
+
+Run `node test.js` to continuously generate a randomize sequence of data that will immediately satisfy `index.html` client for testing.
+
 ## Options
 
 Visit `index.html?d=1` to enable optional display output.
