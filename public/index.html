@@ -403,7 +403,7 @@
               drawOnChartArea: false,
               
             },
-            // position: 'left',
+            position: 'right',
             // beginAtZero: true,
             type: 'linear',
             title: { display: false, text: 'Time (s)' },
@@ -411,7 +411,7 @@
             // suggestedMax: new Date(),
             // min: 0,
             // max: 60000,
-            // reverse: false,
+            reverse: true,
             // time: {
             //   displayFormats: {
             //     millisecond: 'hh:mm:ss'
@@ -464,7 +464,8 @@
     let currentHistory = [];
 
     for (let i=0; i<600; i++) {
-      var tmp = 100 * i;
+      // var tmp = 100 * i;
+      var tmp = i;
       voltageHistory.push({ x: tmp, y: 0 });
       currentHistory.push({ x: tmp, y: 0 });
     }
@@ -476,7 +477,7 @@
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('Received raw data:', data);
+      // console.log('Received raw data:', data);
 
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);
@@ -540,7 +541,7 @@
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
-      if (chart.data.datasets[0].data.length >= 600) {
+      if (chart.data.datasets[0].data.length > 600) {
         // chart.data.datasets.forEach(dataset => dataset.data.shift());
         chart.data.datasets.forEach(dataset => dataset.data.pop());
       }
