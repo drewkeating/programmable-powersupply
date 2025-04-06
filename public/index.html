@@ -599,9 +599,6 @@
     let currentHistory = [];
 
     for (let i=0; i<600; i++) {
-      // var tmp = 100 * i;
-      // var tmp = i * 100 * -1;
-      // var tmp = i;
       let tmp = Date.now() - (i * 100); // (60000);        // new Date(Date.now() - (i * 1000));
       voltageHistory.push({ x: tmp, y: 0 });
       currentHistory.push({ x: tmp, y: 0 });
@@ -661,24 +658,28 @@
         e('.status2').innerHTML = 'CV';
         e('.status2').classList.remove('green');
 
-        startTime = null;
         clearInterval(updateElapsed);
+        startTime = null;
       }
       else {
         e('.status').classList.remove("red");
         e('.status').classList.add("green");
 
-        e('.status2').innerHTML = 'CC';
+        e('.status2').textContent = 'CC';
         e('.status2').classList.add('green');
       }
       
-      e('.voltage').textContent = data.voltage.toString() + " V";
-      e('.current').textContent = data.current.toString() + " A";
-      e('.power').textContent = data.power.toString();
-      e('.voltage_set').textContent = data.voltage_set.toString() + " V";
-      e('.current_set').textContent = data.current_set.toString() + " A";
-      e('.voltage_limit').textContent = data.voltage_limit.toString() + " V";
-      e('.current_limit').textContent = data.current_limit.toString() + " A";
+
+      // Update DOM after instant timeout, executed end of event queue
+      setTimeout(() => {
+        e('.voltage').textContent = data.voltage.toString() + " V";
+        e('.current').textContent = data.current.toString() + " A";
+        e('.power').textContent = data.power.toString();
+        e('.voltage_set').textContent = data.voltage_set.toString() + " V";
+        e('.current_set').textContent = data.current_set.toString() + " A";
+        e('.voltage_limit').textContent = data.voltage_limit.toString() + " V";
+        e('.current_limit').textContent = data.current_limit.toString() + " A";
+      }, 0);
       
       // Toggle hide/show of chart for offline status.
       // if (data.status == "Offline") e('.chart').classList.add('hidden');

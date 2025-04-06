@@ -29,17 +29,18 @@ let tasks = [
 ];
 
 // Payload property metadata, persisted last value between subsequent updates
-let power = 0;
+let power = "0.00";
 
 // Hold all response data in array, mapped directly to named tasks above.
 // responseData array should always hold the last received data for each named property/task by index increment (`activeTask` integer)
 // Order matters, processed in order of tasks listed above
-let responseData = new Array(tasks.length).fill(parseFloat("0.00").toFixed(3));
+let responseData = new Array(tasks.length).fill("0.00");
 
 // Main serial request, executed on prio queue. 
 // Returns timer ID
 const readData = () => {
-  return setTimeout(request_measure, 0, tasks[activeTask]);
+  // return setTimeout(request_measure, 0, tasks[activeTask]);
+  return request_measure(tasks[activeTask]);
 }
 
 // Construct payload for client side
@@ -55,10 +56,12 @@ let payload = {
   status: responseData[0] && responseData[0] > 0 ? "Online" : "Offline",
 };
 
-let count = 0;
+let completedAllTasksCount = 0;
 // Handle incoming data responses
 // Designed to work on current 'activeTask' index
 port.on("data", function (data) {
+
+  // Only complete 'activeTask' if the data is valid. Otherwise, we will presumably retry until it does
   if (data && data.toString().trim().length > 0) {
     responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(3);
 
@@ -79,11 +82,12 @@ port.on("data", function (data) {
       current_limit: responseData[5],
       status: responseData[0] && responseData[0] > 0 ? "Online" : payload['status'],
     }
+
+    // Prepare next task
+    activeTask++;
   }
 
-  // Prepare next task
-  activeTask++;
-
+  
   // Last task completed ('current:limit')
   if (activeTask >= tasks.length) {
     // Point activeTask back to first task for repeat
@@ -93,8 +97,8 @@ port.on("data", function (data) {
     // The following will modify the task queue by prioritizing `measure:` commands over more static data
     // In this case there will be 10 `measure:` calls completed for every `voltage:limit`, which is updated 10 times less.
     // 10 is arbitrary threshold, modify as required, for as often as you want extra data. 
-    count++
-    if (count == 10) {
+    completedAllTasksCount++
+    if (completedAllTasksCount == 9) {
       tasks = [
         'measure:voltage',
         'measure:current',
@@ -104,17 +108,13 @@ port.on("data", function (data) {
         'current:limit',
       ];
 
-      count = 0;
+      completedAllTasksCount = 0;
     }
     else {
       // Enable/disable high frequency tasks as desired
       tasks = [
         'measure:voltage',
         'measure:current',
-        // 'voltage',
-        // 'current',
-        // 'voltage:limit',
-        // 'current:limit',
       ];
     }
   }
