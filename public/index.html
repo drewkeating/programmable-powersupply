@@ -389,6 +389,7 @@
         animation: false,
         scales: {
           x: {
+            display: true,
             ticks: {
               display: false, // hide label only (not the grid lines)
               // major: true,
@@ -398,6 +399,7 @@
               display: true,
               dashOffset: 0,
               color: 'white',
+              dashOffset: 100,
             },
             grid: {
               display: false,
@@ -450,6 +452,11 @@
             // suggestedMin: 0,
             // suggestedMax: 65,
           },
+        },
+        layout: {
+          padding: {
+            // left: 100
+          }
         },
         plugins: {
           legend: {
@@ -504,13 +511,14 @@
         animation: false,
         scales: {
           x: {
+            display: false,
             ticks: {
               display: false, // hide label only (not the grid lines)
               // major: true,
               // source: 'auto',
             },
             border: {
-              display: true,
+              display: false,
               dashOffset: 0,
               color: 'white',
             },
@@ -565,6 +573,11 @@
             // suggestedMin: 0,
             // suggestedMax: 65,
           },
+        },
+        layout: {
+          padding: {
+            left: 28
+          }
         },
         plugins: {
           legend: {
