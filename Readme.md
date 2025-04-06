@@ -1,8 +1,8 @@
-# Multimeter
+# Programmable DC Powersupply
 
-Simple webview to emulate multimeter output.
+Simple webview to emulate Programmable DC Powersupply output.
 
-Interfaces with serial device for reading/writing multimeter data.
+Interfaces with serial device for reading/writing powersupply data.
 
 See: `https://github.com/serialport/node-serialport`
 
@@ -16,6 +16,10 @@ Websockets
 Run `node index.js` to interface with serial device, and deploy websocket requests. See device data for more.
 
 Visit `index.html` to receive websocket requests, which update UI
+
+### Testing
+
+Run `node test.js` to continuously generate a randomize sequence of data that will immediately satisfy `index.html` client for testing.
 
 ## Options
 
