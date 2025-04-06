@@ -542,13 +542,13 @@
         e('.status2').classList.add('green');
       }
       
-      e('.voltage').innerHTML = data.voltage;
-      e('.current').innerHTML = data.current;
-      e('.power').innerHTML = data.power;
-      e('.voltage_set').innerHTML = data.voltage_set;
-      e('.current_set').innerHTML = data.current_set;
-      e('.voltage_limit').innerHTML = data.voltage_limit;
-      e('.current_limit').innerHTML = data.current_limit;
+      e('.voltage').innerHTML = data.voltage.toString() + " V";
+      e('.current').innerHTML = data.current.toString() + " A";
+      e('.power').innerHTML = data.power.toString();
+      e('.voltage_set').innerHTML = data.voltage_set.toString() + " V";
+      e('.current_set').innerHTML = data.current_set.toString() + " A";
+      e('.voltage_limit').innerHTML = data.voltage_limit.toString() + " V";
+      e('.current_limit').innerHTML = data.current_limit.toString() + " A";
       
       // Toggle hide/show of chart for offline status.
       // if (data.status == "Offline") e('.chart').classList.add('hidden');

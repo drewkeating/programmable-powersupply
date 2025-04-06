@@ -73,9 +73,9 @@ port.on("data", function (data) {
 
     payload = { 
       timestamp: new Date().toISOString(), 
-      voltage: responseData[0], 
-      current: responseData[1], 
-      power, 
+      voltage: responseData[0],
+      current: responseData[1],
+      power,
       voltage_set: responseData[2], 
       current_set: responseData[3], 
       voltage_limit: responseData[4], 
@@ -83,7 +83,6 @@ port.on("data", function (data) {
       status: responseData[0] && responseData[0] > 0 ? "Online" : payload['status'],
     }
   }
-
 
   // Prepare next task
   activeTask++;
