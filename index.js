@@ -63,12 +63,12 @@ port.on("data", function (data) {
 
   // Only complete 'activeTask' if the data is valid. Otherwise, we will presumably retry until it does
   if (data && data.toString().trim().length > 0) {
-    responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(3);
+    responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(2);
 
     // Special handling for dynamic data when we have 'measure:voltage', and 'measure:current' (index 0 & 1)
     // Calculate power and store it until index 0 & 1 are updated again
     if (activeTask == 1) {
-      power = (parseFloat(responseData[0]) * parseFloat(responseData[1])).toFixed(3);
+      power = (parseFloat(responseData[0]) * parseFloat(responseData[1])).toFixed(2);
     }
 
     payload = { 
@@ -83,7 +83,7 @@ port.on("data", function (data) {
       status: responseData[0] && responseData[0] > 0 ? "Online" : payload['status'],
     }
 
-    // Prepare next task
+    // Prepare next task (only if data is valid). Presumably on data failures, it will retry until solved.
     activeTask++;
   }
 

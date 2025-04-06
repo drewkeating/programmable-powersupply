@@ -283,7 +283,8 @@
         <div><span>30</span></div>
         <div><span>40</span></div>
         <div><span>50</span></div>
-        <div><span>60(s)</span></div>
+        <div><span>60</span></div>
+        <div><span>(s)</span></div>
       </div>
       
       <!-- <div class="flexLabelVertical">
@@ -344,6 +345,7 @@
       document.getElementsByTagName('head')[0].appendChild(styles);
     }
     
+    let setVoltageLabel = false;
     const ctx = document.getElementById('chart').getContext('2d');
     const chart = new Chart(ctx, {
       type: 'line',
@@ -351,6 +353,7 @@
         datasets: [
         {
           label: 'Voltage (V)',
+          // data: [10, 20, 30, 40],
           data: [],
           borderColor: '#F4FB5F',
           borderWidth: 2,
@@ -381,7 +384,8 @@
         //     tension: 0,
         //     pointBorderWidth: 0,
         // }
-        ]
+        ],
+        // labels: ['one','two','three','four']
       },
       options: {
         responsive: true,
@@ -393,6 +397,11 @@
               display: false, // hide label only (not the grid lines)
               // major: true,
               // source: 'auto',
+              // For a category axis, the val is the index so the lookup via getLabelForValue is needed
+              // callback: function(val, index) {
+              //   // Hide every 2nd tick label
+              //   return index % 2 === 0 ? this.getLabelForValue(val) + '***': '';
+              // },
             },
             border: {
               display: true,
@@ -401,7 +410,7 @@
               dashOffset: 100,
             },
             grid: {
-              display: false,
+              display: true,
               color: 'white',
               // tickBorderDash: [
               //     10,100,10,0,1000,10, 100, 10
@@ -433,6 +442,14 @@
               color: 'white',
               // major: true,
               // mirror: true,
+              callback: function(val, index, values) {
+                // var highest = Math.max(...values);
+                if (values[values.length-1].value == val) {
+                  setVoltageLabel = true;
+                  return this.getLabelForValue(val) + ' (V)';
+                }
+                return this.getLabelForValue(val);
+              },
             },
             border: {
               display: true,
@@ -455,7 +472,7 @@
         layout: {
           padding: {
             // left: 100
-            right: 28,
+            right: 45,
           }
         },
         plugins: {
@@ -466,7 +483,7 @@
       }
     });
 
-
+    let setAmpLabel = false;
     const ctx2 = document.getElementById('chart2').getContext('2d');
     const chart2 = new Chart(ctx2, {
       type: 'line',
@@ -516,6 +533,7 @@
               display: false, // hide label only (not the grid lines)
               // major: true,
               // source: 'auto',
+              
             },
             border: {
               display: false,
@@ -523,12 +541,12 @@
               color: 'white',
             },
             grid: {
-              display: false,
+              display: true,
               color: 'white',
               // tickBorderDash: [
               //     10,100,10,0,1000,10, 100, 10
               // ],
-              drawOnChartArea: false,
+              drawOnChartArea: true,
             },
             position: 'left',
             // beginAtZero: true,
@@ -554,6 +572,13 @@
               color: 'white',
               // major: true,
               // mirror: true,
+              callback: function(val, index, values) {
+                // var highest = Math.max(...values);
+                if (values[values.length-1].value == val) {
+                  return this.getLabelForValue(val) + ' (A)';
+                }
+                return this.getLabelForValue(val);
+              },
             },
             border: {
               display: true,
@@ -575,7 +600,11 @@
         },
         layout: {
           padding: {
-            left: 30,
+            left: 43,
+            right: 0,
+          },
+          margin: {
+            right: 0,
           }
         },
         plugins: {
@@ -598,7 +627,7 @@
     let voltageHistory = [];
     let currentHistory = [];
 
-    for (let i=0; i<600; i++) {
+    for (let i=0; i<700; i++) {
       let tmp = Date.now() - (i * 100); // (60000);        // new Date(Date.now() - (i * 1000));
       voltageHistory.push({ x: tmp, y: 0 });
       currentHistory.push({ x: tmp, y: 0 });
@@ -621,7 +650,7 @@
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('Received raw data:', data);
+      // console.log('Received raw data:', data);
 
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);
@@ -668,7 +697,6 @@
         e('.status2').textContent = 'CC';
         e('.status2').classList.add('green');
       }
-      
 
       // Update DOM after instant timeout, executed end of event queue
       setTimeout(() => {
@@ -685,13 +713,15 @@
       // if (data.status == "Offline") e('.chart').classList.add('hidden');
       // else e('.chart').classList.remove('hidden');
       
-      if (chart.data.datasets[0].data.length > 600) {
+      if (chart.data.datasets[0].data.length > 700) {
         // chart.data.datasets.forEach(dataset => dataset.data.shift());
         chart.data.datasets.forEach(dataset => dataset.data.pop());
         chart2.data.datasets.forEach(dataset => dataset.data.pop());
       }
     
       // Draw
+      setAmpLabel = false;
+      setVoltageLabel = false;
       chart.update();
       chart2.update();
     };

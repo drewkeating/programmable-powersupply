@@ -39,13 +39,13 @@ wss.on("connection", (ws) => {
     // c = 0;
 
     let payload = {
-      current: c,
-      voltage: v,
-      power: (parseFloat(c) * parseFloat(v)).toFixed(3),
-      voltage_set: v,
-      current_set: c,
-      voltage_limit: 120,
-      current_limit: 60,
+      current: c.toFixed(2),
+      voltage: v.toFixed(2),
+      power: (parseFloat(c) * parseFloat(v)).toFixed(2),
+      voltage_set: v.toFixed(2),
+      current_set: c.toFixed(2),
+      voltage_limit: 60,
+      current_limit: 15,
       status: 'Online' // force status
     
     }
