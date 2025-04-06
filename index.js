@@ -82,10 +82,13 @@ port.on("data", function (data) {
       current_limit: responseData[5],
       status: responseData[0] && responseData[0] > 0 ? "Online" : payload['status'],
     }
+
+    // Prepare next task
+    activeTask++;
   }
 
-  // Prepare next task
-  activeTask++;
+  
+
   // Last task completed ('current:limit')
   if (activeTask >= tasks.length) {
     // Point activeTask back to first task for repeat

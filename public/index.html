@@ -300,8 +300,8 @@
     </div>
     -->
     <div class="stats">
-      <div class="voltage">0.00V</div>
-      <div class="current">0.000A</div>
+      <div class="voltage">0.00 V</div>
+      <div class="current">0.000 A</div>
     </div>
     
     <div class="setlimit">
@@ -309,16 +309,16 @@
       <div>
         <div class="title">Set</div>
         <div class="body">
-          <div class="voltage_set" style="text-align: left;">60.00 V</div>
-          <div class="current_set" style="text-align: right;">5.00 A</div>
+          <div class="voltage_set" style="text-align: left;">0.00 V</div>
+          <div class="current_set" style="text-align: right;">0.00 A</div>
         </div>
       </div>
       
       <div>
         <div class="title">Limit</div>
         <div class="body">
-          <div class="voltage_limit" style="text-align: left;">61.00 v</div>
-          <div class="current_limit" style="text-align: right;">5.100 A</div>
+          <div class="voltage_limit" style="text-align: left;">0.00 v</div>
+          <div class="current_limit" style="text-align: right;">0.100 A</div>
         </div>
       </div>
       
@@ -339,6 +339,120 @@
     
     const ctx = document.getElementById('chart').getContext('2d');
     const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+        {
+          label: 'Voltage (V)',
+          data: [],
+          borderColor: '#F4FB5F',
+          borderWidth: 2,
+          fill: false,
+          stepped: 'middle',
+          tension: 0,
+          pointBorderWidth: 0,
+          pointRadius: 0 // disable for a single dataset
+        },
+        {
+          label: 'Current (A)',
+          data: [],
+          borderColor: '#7197D6',
+          borderWidth: 2,
+          fill: false,
+          stepped: 'middle',
+          tension: 0,
+          pointBorderWidth: 0,
+          pointRadius: 0 // disable for a single dataset
+        },
+        // {
+        //     label: 'Power (W)',
+        //     data: [],
+        //     borderColor: 'red',
+        //     borderWidth: 2,
+        //     fill: false,
+        //     stepped: 'middle',
+        //     tension: 0,
+        //     pointBorderWidth: 0,
+        // }
+        ]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        scales: {
+          x: {
+            ticks: {
+              display: false, // hide label only (not the grid lines)
+              // major: true,
+              // source: 'auto',
+            },
+            border: {
+              display: true,
+              dashOffset: 0,
+              color: 'white',
+            },
+            grid: {
+              display: false,
+              color: 'white',
+              // tickBorderDash: [
+              //     10,100,10,0,1000,10, 100, 10
+              // ],
+              drawOnChartArea: true,
+              
+            },
+            position: 'left',
+            beginAtZero: true,
+            title: { display: false, text: 'Time (s)' },
+            // suggestedMin: new Date() - (6000), // hour ago
+            // suggestedMax: new Date(),
+            // min: 0,
+            // max: 60000,
+            reverse: true,
+            time: {
+              displayFormats: {
+                millisecond: 'hh:mm:ss',
+              },
+              // unit: 'millisecond',
+              parser: false,
+            },
+            type: 'time',
+            parsing: false,
+        
+          },
+          y: {
+            ticks: {
+              color: 'white',
+              // major: true,
+              // mirror: true,
+            },
+            border: {
+              display: true,
+              dashOffset: 0,
+              color: 'white',
+            },
+            grid: {
+              display: true,
+              tickColor: 'white',
+              drawOnChartArea: false,
+            },
+            beginAtZero: true,
+            position: 'left',
+            type: 'linear',
+            title: { display: false, text: 'Values'},
+            // suggestedMin: 0,
+            // suggestedMax: 65,
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          }
+        }
+      }
+    });
+
+
+    const chart2 = new Chart(ctx, {
       type: 'line',
       data: {
         datasets: [
