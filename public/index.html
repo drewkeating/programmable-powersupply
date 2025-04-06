@@ -47,6 +47,13 @@
       height: 400px !important;
       padding: 10px 30px 0 10px;
     }
+
+    #chart {
+      position: absolute;
+    }
+    #chart2 {
+      position: relative;
+    }
     
     h2 {
       color: #00ff00;
@@ -268,6 +275,7 @@
       </div>
       
       <canvas id="chart"></canvas>
+      <canvas id="chart2"></canvas>
       
       <div class="flexLabel">
         <div><span>10</span></div>
@@ -353,17 +361,17 @@
           pointBorderWidth: 0,
           pointRadius: 0 // disable for a single dataset
         },
-        {
-          label: 'Current (A)',
-          data: [],
-          borderColor: '#7197D6',
-          borderWidth: 2,
-          fill: false,
-          stepped: 'middle',
-          tension: 0,
-          pointBorderWidth: 0,
-          pointRadius: 0 // disable for a single dataset
-        },
+        // {
+        //   label: 'Current (A)',
+        //   data: [],
+        //   borderColor: '#7197D6',
+        //   borderWidth: 2,
+        //   fill: false,
+        //   stepped: 'middle',
+        //   tension: 0,
+        //   pointBorderWidth: 0,
+        //   pointRadius: 0 // disable for a single dataset
+        // },
         // {
         //     label: 'Power (W)',
         //     data: [],
@@ -452,21 +460,22 @@
     });
 
 
-    const chart2 = new Chart(ctx, {
+    const ctx2 = document.getElementById('chart2').getContext('2d');
+    const chart2 = new Chart(ctx2, {
       type: 'line',
       data: {
         datasets: [
-        {
-          label: 'Voltage (V)',
-          data: [],
-          borderColor: '#F4FB5F',
-          borderWidth: 2,
-          fill: false,
-          stepped: 'middle',
-          tension: 0,
-          pointBorderWidth: 0,
-          pointRadius: 0 // disable for a single dataset
-        },
+        // {
+        //   label: 'Voltage (V)',
+        //   data: [],
+        //   borderColor: '#F4FB5F',
+        //   borderWidth: 2,
+        //   fill: false,
+        //   stepped: 'middle',
+        //   tension: 0,
+        //   pointBorderWidth: 0,
+        //   pointRadius: 0 // disable for a single dataset
+        // },
         {
           label: 'Current (A)',
           data: [],
@@ -588,10 +597,12 @@
 
     // Populate chart
     chart.data.datasets[0].data = voltageHistory;
-    chart.data.datasets[1].data = currentHistory;
+    // chart.data.datasets[1].data = currentHistory;
+    chart2.data.datasets[0].data = currentHistory;
 
     // Predraw chart
     chart.update();
+    chart2.update();
 
     // Handle socket close
     ws.addEventListener("close", (event) => {
@@ -625,16 +636,11 @@
         }, 10);        
       }
 
-      
       // We want 10 data points per second
-      // const timeElapsed = new Date(Date.now() - startTime);
-      // const timeElapsed = new Date(Date.now() - startTime);
-      // console.log("cungus:", timeElapsed.getMilliseconds());
-      // const timeElapsed = (Date.now() - startTime) / 100;
       const timeElapsed = Date.now();
       
       chart.data.datasets[0].data.unshift({ x: timeElapsed, y: data.voltage });
-      chart.data.datasets[1].data.unshift({ x: timeElapsed, y: data.current });
+      chart2.data.datasets[0].data.unshift({ x: timeElapsed, y: data.current });
       
       e('.status').innerHTML = data.status == "Offline" ? "OFF" : "ON";
       
@@ -671,10 +677,12 @@
       if (chart.data.datasets[0].data.length > 600) {
         // chart.data.datasets.forEach(dataset => dataset.data.shift());
         chart.data.datasets.forEach(dataset => dataset.data.pop());
+        chart2.data.datasets.forEach(dataset => dataset.data.pop());
       }
     
       // Draw
       chart.update();
+      chart2.update();
     };
   </script>
 </body>
