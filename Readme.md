@@ -1,8 +1,8 @@
-# Multimeter
+# Programmable DC Powersupply
 
-Simple webview to emulate multimeter output.
+Simple webview to emulate Programmable DC Powersupply output.
 
-Interfaces with serial device for reading/writing multimeter data.
+Interfaces with serial device for reading/writing powersupply data.
 
 See: `https://github.com/serialport/node-serialport`
 
