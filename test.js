@@ -35,8 +35,8 @@ wss.on("connection", (ws) => {
     }
 
     // Hardcoded values
-    v = 12;
-    c = 0;
+    // v = 12;
+    // c = 0;
 
     let payload = {
       current: c,

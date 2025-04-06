@@ -286,13 +286,13 @@
         <div><span>60(s)</span></div>
       </div>
       
-      <div class="flexLabelVertical">
+      <!-- <div class="flexLabelVertical">
         <div><span>10</span></div>
         <div><span>8</span></div>
         <div><span>6</span></div>
         <div><span>4</span></div>
         <div><span>2</span></div>
-      </div>
+      </div> -->
     </div>
     
     <div>
@@ -405,11 +405,11 @@
               // tickBorderDash: [
               //     10,100,10,0,1000,10, 100, 10
               // ],
-              drawOnChartArea: true,
+              drawOnChartArea: false,
               
             },
             position: 'left',
-            beginAtZero: true,
+            // beginAtZero: true,
             title: { display: false, text: 'Time (s)' },
             // suggestedMin: new Date() - (6000), // hour ago
             // suggestedMax: new Date(),
@@ -520,11 +520,11 @@
               // tickBorderDash: [
               //     10,100,10,0,1000,10, 100, 10
               // ],
-              drawOnChartArea: true,
+              drawOnChartArea: false,
               
             },
             position: 'left',
-            beginAtZero: true,
+            // beginAtZero: true,
             title: { display: false, text: 'Time (s)' },
             // suggestedMin: new Date() - (6000), // hour ago
             // suggestedMax: new Date(),
@@ -559,7 +559,7 @@
               drawOnChartArea: false,
             },
             beginAtZero: true,
-            position: 'left',
+            position: 'right',
             type: 'linear',
             title: { display: false, text: 'Values'},
             // suggestedMin: 0,
