@@ -313,7 +313,6 @@
     </div>
     
     <div class="setlimit">
-      
       <div>
         <div class="title">Set</div>
         <div class="body">
@@ -530,7 +529,6 @@
               //     10,100,10,0,1000,10, 100, 10
               // ],
               drawOnChartArea: false,
-              
             },
             position: 'left',
             // beginAtZero: true,
@@ -577,7 +575,7 @@
         },
         layout: {
           padding: {
-            left: 28
+            left: 30,
           }
         },
         plugins: {
@@ -624,7 +622,6 @@
       return clearInterval(updateElapsed);
     });
 
-
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('Received raw data:', data);
@@ -646,13 +643,12 @@
           e('.sessiontime').innerHTML = ("0" + Math.round(diff / 3600000)).slice(-2) + ":" + 
             ("0" + Math.round(diff / 60000)).slice(-2) + ":" + 
             ("0" + Math.round(diff / 1000)).slice(-2);
-
-        }, 10);        
+        }, 10);
       }
 
       // We want 10 data points per second
       const timeElapsed = Date.now();
-      
+
       chart.data.datasets[0].data.unshift({ x: timeElapsed, y: data.voltage });
       chart2.data.datasets[0].data.unshift({ x: timeElapsed, y: data.current });
       
@@ -676,13 +672,13 @@
         e('.status2').classList.add('green');
       }
       
-      e('.voltage').innerHTML = data.voltage.toString() + " V";
-      e('.current').innerHTML = data.current.toString() + " A";
-      e('.power').innerHTML = data.power.toString();
-      e('.voltage_set').innerHTML = data.voltage_set.toString() + " V";
-      e('.current_set').innerHTML = data.current_set.toString() + " A";
-      e('.voltage_limit').innerHTML = data.voltage_limit.toString() + " V";
-      e('.current_limit').innerHTML = data.current_limit.toString() + " A";
+      e('.voltage').textContent = data.voltage.toString() + " V";
+      e('.current').textContent = data.current.toString() + " A";
+      e('.power').textContent = data.power.toString();
+      e('.voltage_set').textContent = data.voltage_set.toString() + " V";
+      e('.current_set').textContent = data.current_set.toString() + " A";
+      e('.voltage_limit').textContent = data.voltage_limit.toString() + " V";
+      e('.current_limit').textContent = data.current_limit.toString() + " A";
       
       // Toggle hide/show of chart for offline status.
       // if (data.status == "Offline") e('.chart').classList.add('hidden');

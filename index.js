@@ -1,24 +1,21 @@
 const WebSocket = require("ws")
 const express = require("express")
 const http = require("http")
-const fs = require("fs")
 const path = require("path")
 const { SerialPort } = require("serialport")
-
 const app = express()
 const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
-
 const clients = new Set();
 
 // Set up the serial port
 const port = new SerialPort({
   path: "COM4", // Change this to your actual port
   baudRate: 115200,
-})
+});
 
 // Serve the client page
-app.use(express.static("public"))
+app.use(express.static("public"));
 
 // Track the current active task
 let activeTask = 0;
@@ -62,7 +59,7 @@ let count = 0;
 // Handle incoming data responses
 // Designed to work on current 'activeTask' index
 port.on("data", function (data) {
-  if (data) {
+  if (data && data.toString().trim().length > 0) {
     responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(3);
 
     // Special handling for dynamic data when we have 'measure:voltage', and 'measure:current' (index 0 & 1)
@@ -82,12 +79,10 @@ port.on("data", function (data) {
       current_limit: responseData[5],
       status: responseData[0] && responseData[0] > 0 ? "Online" : payload['status'],
     }
-
-    // Prepare next task
-    activeTask++;
   }
 
-  
+  // Prepare next task
+  activeTask++;
 
   // Last task completed ('current:limit')
   if (activeTask >= tasks.length) {
@@ -122,13 +117,11 @@ port.on("data", function (data) {
         // 'current:limit',
       ];
     }
-
   }
 
   // Continuously read data
   return readData();
 });
-
 
 // Send request to serial port
 const request_measure = (request) => {
