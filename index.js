@@ -37,7 +37,7 @@ let power = 0;
 // Hold all response data in array, mapped directly to named tasks above.
 // responseData array should always hold the last received data for each named property/task by index increment (`activeTask` integer)
 // Order matters, processed in order of tasks listed above
-let responseData = new Array(tasks.length).fill("");
+let responseData = new Array(tasks.length).fill(parseFloat(0).toFixed(3));
 
 // Main serial request, executed on prio queue. 
 // Returns timer ID

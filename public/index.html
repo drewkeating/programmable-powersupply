@@ -300,8 +300,8 @@
     </div>
     -->
     <div class="stats">
-      <div class="voltage">60.00V</div>
-      <div class="current">5.000A</div>
+      <div class="voltage">0.00V</div>
+      <div class="current">0.000A</div>
     </div>
     
     <div class="setlimit">
@@ -439,8 +439,8 @@
             position: 'left',
             type: 'linear',
             title: { display: false, text: 'Values'},
-            suggestedMin: 0,
-            suggestedMax: 65,
+            // suggestedMin: 0,
+            // suggestedMax: 65,
           },
         },
         plugins: {
@@ -488,7 +488,7 @@
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      // console.log('Received raw data:', data);
+      console.log('Received raw data:', data);
 
       if (!startTime && data.status == "Online") {
         clearInterval(updateElapsed);

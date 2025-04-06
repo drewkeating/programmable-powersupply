@@ -1,10 +1,11 @@
 // Simple test suite for sending consistent data over websockets that `index.html` client expects
-const WebSocket = require("ws")
-const express = require("express")
-const http = require("http")
-const app = express()
-const server = http.createServer(app)
-const wss = new WebSocket.Server({ server })
+const path = require("path");
+const WebSocket = require("ws");
+const express = require("express");
+const http = require("http");
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 const clients = new Set();
 
@@ -32,6 +33,10 @@ wss.on("connection", (ws) => {
     } else {
       v = Math.floor(Math.random() * ((v+1) - (v-1) + 1) + (v-1));
     }
+
+    // Hardcoded values
+    v = 12;
+    c = 0;
 
     let payload = {
       current: c,
