@@ -309,24 +309,24 @@
     </div>
     -->
     <div class="stats">
-      <div class="voltage">0.00 V</div>
-      <div class="current">0.000 A</div>
+      <div class=""><span class="voltage">00.00</span> V</div>
+      <div class=""><span class="current">0.000</span> A</div>
     </div>
     
     <div class="setlimit">
       <div>
         <div class="title">Set</div>
         <div class="body">
-          <div class="voltage_set" style="text-align: left;">0.00 V</div>
-          <div class="current_set" style="text-align: right;">0.00 A</div>
+          <div class="" style="text-align: left;"><span class="voltage_set">00.00</span> V</div>
+          <div class="" style="text-align: right;"><span class="current_set">0.000</span> A</div>
         </div>
       </div>
       
       <div>
         <div class="title">Limit</div>
         <div class="body">
-          <div class="voltage_limit" style="text-align: left;">0.00 v</div>
-          <div class="current_limit" style="text-align: right;">0.100 A</div>
+          <div class="" style="text-align: left;"><span class="voltage_limit">00.00</span> v</div>
+          <div class="" style="text-align: right;"><span class="current_limit">0.000</span> A</div>
         </div>
       </div>
       
@@ -402,6 +402,8 @@
               //   // Hide every 2nd tick label
               //   return index % 2 === 0 ? this.getLabelForValue(val) + '***': '';
               // },
+              maxTicksLimit: 350,
+              
             },
             border: {
               display: true,
@@ -440,13 +442,15 @@
           y: {
             ticks: {
               color: 'white',
+              maxTicksLimit: 11,
+              // stepSize: 1,
               // major: true,
               // mirror: true,
               callback: function(val, index, values) {
                 // var highest = Math.max(...values);
                 if (values[values.length-1].value == val) {
                   setVoltageLabel = true;
-                  return this.getLabelForValue(val) + ' (V)';
+                  return '(V)  ' + this.getLabelForValue(val);
                 }
                 return this.getLabelForValue(val);
               },
@@ -533,6 +537,7 @@
               display: false, // hide label only (not the grid lines)
               // major: true,
               // source: 'auto',
+              maxTicksLimit: 350,
               
             },
             border: {
@@ -570,13 +575,15 @@
           y: {
             ticks: {
               color: 'white',
+              maxTicksLimit: 11,
               // major: true,
               // mirror: true,
               callback: function(val, index, values) {
                 // var highest = Math.max(...values);
                 if (values[values.length-1].value == val) {
-                  return this.getLabelForValue(val) + ' (A)';
+                  return this.getLabelForValue(val) + '  (A)';
                 }
+                else if (val == 0) return '';
                 return this.getLabelForValue(val);
               },
             },
@@ -700,13 +707,13 @@
 
       // Update DOM after instant timeout, executed end of event queue
       setTimeout(() => {
-        e('.voltage').textContent = data.voltage.toString() + " V";
-        e('.current').textContent = data.current.toString() + " A";
+        e('.voltage').textContent = data.voltage.toString();
+        e('.current').textContent = data.current.toString();
         e('.power').textContent = data.power.toString();
-        e('.voltage_set').textContent = data.voltage_set.toString() + " V";
-        e('.current_set').textContent = data.current_set.toString() + " A";
-        e('.voltage_limit').textContent = data.voltage_limit.toString() + " V";
-        e('.current_limit').textContent = data.current_limit.toString() + " A";
+        e('.voltage_set').textContent = data.voltage_set.toString();
+        e('.current_set').textContent = data.current_set.toString();
+        e('.voltage_limit').textContent = data.voltage_limit.toString();
+        e('.current_limit').textContent = data.current_limit.toString();
       }, 0);
       
       // Toggle hide/show of chart for offline status.

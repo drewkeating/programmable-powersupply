@@ -63,7 +63,10 @@ port.on("data", function (data) {
 
   // Only complete 'activeTask' if the data is valid. Otherwise, we will presumably retry until it does
   if (data && data.toString().trim().length > 0) {
-    responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(2);
+
+    // Amplitude has 3 decimal places, voltage 2
+    let fixedRange = [1, 3, 5].includes(activeTask) ? 3 : 2;
+    responseData[activeTask] = parseFloat(data.toString().trim()).toFixed(fixedRange);
 
     // Special handling for dynamic data when we have 'measure:voltage', and 'measure:current' (index 0 & 1)
     // Calculate power and store it until index 0 & 1 are updated again
@@ -87,7 +90,6 @@ port.on("data", function (data) {
     activeTask++;
   }
 
-  
   // Last task completed ('current:limit')
   if (activeTask >= tasks.length) {
     // Point activeTask back to first task for repeat
