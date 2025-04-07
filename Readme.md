@@ -6,9 +6,9 @@ Interfaces with serial device for reading/writing power supply data.
 
 See: `https://github.com/serialport/node-serialport`
 
-Hardware tested: 
-  Kiprim DC310S, which appears to be a re-branded OWON SPE3103.
-  Kiprim DC605S, which appears to be a re-branded OWON SPE6053.
+Hardware tested:<br />
+  Kiprim DC310S, which appears to be a re-branded OWON SPE3103.<br />
+  Kiprim DC605S, which appears to be a re-branded OWON SPE6053.<br />
 
 ## Tech
 
