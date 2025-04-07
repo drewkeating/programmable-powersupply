@@ -1,10 +1,14 @@
 # Programmable DC Powersupply
 
-Simple webview to emulate Programmable DC Powersupply output.
+Simple webview to emulate Programmable DC Power supply output.
 
-Interfaces with serial device for reading/writing powersupply data.
+Interfaces with serial device for reading/writing power supply data.
 
 See: `https://github.com/serialport/node-serialport`
+
+Hardware tested: 
+  Kiprim DC310S, which appears to be a re-branded OWON SPE3103.
+  Kiprim DC605S, which appears to be a re-branded OWON SPE6053.
 
 ## Tech
 
@@ -31,3 +35,7 @@ Visit `index.html?d=1` to enable optional display output.
 - Improve left to right scrolling
 - Guarantee refresh rate for client
 - Graphical fixes for accuracy
+
+
+Example of a webview of the Kiprim DC310S:
+![Screenshot of an example of the webview.](https://github.com/joeyslack/programmable-powersupply/blob/master/public/images/screenshot.png?raw=true)
